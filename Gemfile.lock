@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    zygote (0.0.0)
+    zygote (0.0.1)
       chef-provisioner (= 0.0.8)
       genesisreactor (= 0.0.4)
       supermodel (= 0.1.6)

@@ -5,7 +5,6 @@ require 'zygote/version'
 Gem::Specification.new do |s|
   s.name        = 'zygote'
   s.version     = Zygote::VERSION
-  s.version     = '0.0.0'
   s.date        = '2015-11-24'
   s.summary     = 'Differentiate servers with iPXE'
   s.description = 'Automate baremetal server actions with iPXE'
