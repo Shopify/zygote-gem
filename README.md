@@ -1,4 +1,4 @@
-[![Circle CI](https://circleci.com/gh/Shopify/zygote.svg?style=svg&circle-token=b14c427cac4c84b3f725a037be4bddf8978463df)](https://circleci.com/gh/Shopify/zygote)
+[![travis ci](https://travis-ci.org/dalehamel/zygote-gem.svg)](https://travis-ci.org/dalehamel/zygote-gem)
 
 # Zygote
 
@@ -62,7 +62,7 @@ curl -X DELETE localhost:7000/queue?sku=1234567 # FIXME: this is orthogonal, fig
 
 # Testing
 
-Tested automatically using [circle ci](https://circleci.com/gh/Shopify/zygote).
+Tested automatically using [travis ci](https://travis-ci.org/dalehamel/zygote-gem).
 
 Most tests are fixture based, as the app primarily renders templates.
 
