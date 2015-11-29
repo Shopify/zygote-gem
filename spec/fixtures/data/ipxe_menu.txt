@@ -1,0 +1,74 @@
+#!ipxe
+
+# This template is shamelessly ripped off from https://gist.github.com/robinsmidsrod/2234639
+# The most notable change is that we are of course dynamically generating the menu using cells.
+
+
+# Allow bypassing the menu entirely by calling a specific target cell
+
+###################### MAIN MENU ####################################
+
+set menu-timeout 0 # timeout is in milliseconds, so let's take seconds instead.
+set submenu-timeout ${menu-timeout}
+set menu-default exit
+
+# This menu should be dynamically generated from cells, probably just make a metadata format
+
+:start
+menu iPXE boot menu for SPM-ZM143S050147 from 127.0.0.1
+item --gap --             ------------------------- OS Installation --------------------------------
+item --gap --             ------------------------- Tools and utilities ----------------------------
+  
+item --key t test Boot Alchemy Linux
+item --gap --             ------------------------- Advanced opts -------------------------------
+item --key c config       Configure settings
+item shell                Drop to iPXE shell
+item reboot               Reboot computer
+item
+item --key x exit         Exit iPXE and continue BIOS boot
+choose --timeout ${menu-timeout} --default ${menu-default} selected || goto cancel
+set menu-timeout 0
+goto ${selected}
+
+# Generated menu entries for each cell
+test with params board-product=X9DRT-PT&board-serial=ZM143S050147&dhcp-server=172.16.2.4&ip=127.0.0.1&mac=0c%3Ac4%3A7a%3A05%3A77%3A1a&manufacturer=Supermicro&product=SYS-2027PR-HTTR&serial=S15500224715585&sku=SPM-ZM143S050147
+
+# Render any submenus
+
+##########################################
+
+:cancel
+echo You cancelled the menu, dropping you to a shell
+
+:shell
+echo Type 'exit' to get the back to the menu
+shell
+set menu-timeout 0
+set submenu-timeout 0
+goto start
+
+:failed
+echo Booting failed, dropping to shell
+goto shell
+
+:reboot
+reboot
+
+:exit
+# On dell servers exit causes a PXE boot loop.
+# This tells the server to boot from first drive instead
+# http://ipxe.org/cmd/sanboot
+# http://ipxe.org/appnote/work_around_bios_halting_on_ipxe_exit
+
+sanboot --no-describe --drive 0x80
+#exit
+
+:config
+config
+goto start
+
+:back
+set submenu-timeout 0
+clear submenu-default
+goto start
+

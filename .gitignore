@@ -3,7 +3,7 @@ config/secrets.json
 tmp
 tmp/client.pem
 spec/fixtures/memory.db
-data
+./data
 *.swp
 *.swo
 *.gem
