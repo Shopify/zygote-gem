@@ -28,7 +28,7 @@ def clean_params(params)
 end
 
 def my_ip
-  Socket.ip_address_list.find{|x| x.ipv4? && !x.ipv4_loopback?}.ip_address
+  Socket.ip_address_list.find { |x| x.ipv4? && !x.ipv4_loopback? }.ip_address
 end
 
 def discover_domain

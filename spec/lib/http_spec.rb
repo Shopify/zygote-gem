@@ -20,7 +20,7 @@ RSpec.describe ZygoteWeb do
 
   context 'queues' do
     let(:asset) { 'SPM-1234567' }
-    let(:asset2) { 'SPM-2468101214'}
+    let(:asset2) { 'SPM-2468101214' }
     let(:cell) { 'test' }
     let(:payload) { { 'foo' => 'bar' } }
     let(:count) { 10 }
@@ -60,7 +60,7 @@ RSpec.describe ZygoteWeb do
       post("/queue/#{asset}/#{cell}", payload)
       post("/queue/#{asset2}/#{cell}", payload)
 
-      response = JSON.parse(get("/queue").response)
+      response = JSON.parse(get('/queue').response)
       expect(response.length).to eq(2)
       expect(response[asset]).to_not be_nil
       expect(response[asset2]).to_not be_nil
@@ -74,7 +74,7 @@ RSpec.describe ZygoteWeb do
           payload.merge('selected_cell' => 'default ubuntu', 'index' => '2')
         ]
       }
-      post("/queue/bulk", bulk_queue.to_json)
+      post('/queue/bulk', bulk_queue.to_json)
 
       expect(JSON.parse(get("/queue/#{asset}").response).first).to eq(payload.merge('selected_cell' => cell, 'index' => 1.to_s))
       expect(JSON.parse(get("/queue/#{asset2}").response).first).to eq(payload.merge('selected_cell' => 'burnin', 'index' => 1.to_s))
@@ -86,8 +86,8 @@ RSpec.describe ZygoteWeb do
         post("/queue/#{asset}/#{cell}", payload.merge('index' => i))
       end
       (1..count).to_a.each do |i|
-        menu = get("/chain", manufacturer: 'Supermicro', serial: '1234567').response
-        expect(menu).to include( payload.merge('index' => i).to_query )
+        menu = get('/chain', manufacturer: 'Supermicro', serial: '1234567').response
+        expect(menu).to include(payload.merge('index' => i).to_query)
         expect(menu).to include("goto #{payload['select_cell']}")
       end
       expect(JSON.parse(get("/queue/#{asset}").response)).to be_empty

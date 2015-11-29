@@ -43,7 +43,7 @@ module CellQueue
     entry.save if entry
   end
 
-  def all()
+  def all
     CellQueueEntry.all
   end
 end

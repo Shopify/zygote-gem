@@ -10,7 +10,6 @@ require 'zygote/cell_queue'
 # Main HTTP class, handles routing methods
 # Uses sinatra format (all sinatra docs on routing methods apply)
 class ZygoteWeb < Genesis::Http::Handler
-
   # Requested by iPXE on boot, chains into /boot.
   # This enables us to customize what details we want iPXE to send us
   # The iPXE undionly.kpxe should contain an embedded script to call this URL
@@ -24,7 +23,7 @@ class ZygoteWeb < Genesis::Http::Handler
     cleaned = clean_params(params.to_h)
     # Add the request ip into the params
     ip = request.ip == '127.0.0.1' ? @env['HTTP_X_FORWARDED_FOR'] : request.ip
-    ip = '127.0.0.1' if (ENV['TESTING'] || ip.nil? || ip.empty?)
+    ip = '127.0.0.1' if ENV['TESTING'] || ip.nil? || ip.empty?
     cleaned['ip'] = ip
     # Compute SKU from parameters
     sku = compute_sku(cleaned['manufacturer'], cleaned['serial'], cleaned['board-serial'])
@@ -33,7 +32,7 @@ class ZygoteWeb < Genesis::Http::Handler
     queued_data = CellQueue.shift(sku)
     cleaned.merge!(queued_data) if queued_data
     @channel << cleaned
-    body { erb :menu, locals: { opts: ZygoteWeb::cell_config.merge('params' => cleaned || {}) } }
+    body { erb :menu, locals: { opts: ZygoteWeb.cell_config.merge('params' => cleaned || {}) } }
   end
 
   # Render an action for a particular cell
@@ -43,7 +42,7 @@ class ZygoteWeb < Genesis::Http::Handler
     # Add the cell to the parameters
     cell = cleaned['cell']
     # Merge the cleaned params in with any cell options
-    cell_opts = ZygoteWeb::cell_config['index']['cells'][cell] || {}
+    cell_opts = ZygoteWeb.cell_config['index']['cells'][cell] || {}
     opts = cell_opts.merge('params' => cleaned || {})
     @channel << opts # for debugging
     body { erb :"#{cell}/#{cleaned['action']}".to_sym, locals: { opts: opts } }
@@ -59,7 +58,7 @@ class ZygoteWeb < Genesis::Http::Handler
     CellQueue.all.each do |queue_entry|
       response[queue_entry.name] = queue_entry.data
     end
-    body { JSON.pretty_generate(response)}
+    body { JSON.pretty_generate(response) }
   end
 
   # Delete the queue for a SKU
@@ -69,7 +68,6 @@ class ZygoteWeb < Genesis::Http::Handler
   end
 
   post %r{/queue/bulk$} do
-
     bulk_queue = JSON.parse(request.body.read)
     bulk_queue.each do |asset, queue|
       queue = [queue] unless queue.is_a?(Array)
@@ -95,11 +93,11 @@ class ZygoteWeb < Genesis::Http::Handler
     puts args if ENV['DEBUG']
   end
 
- def ZygoteWeb::cell_config
+  def self::cell_config
     @@cell_config
-  end
+   end
 
-  def ZygoteWeb::cell_config= (value)
+  def self::cell_config=(value)
     @@cell_config = value
   end
 end
@@ -107,15 +105,15 @@ end
 def zygote(port: 7000, threads:1000, config_path: nil, cells: [], debug:false)
   debug ||= ENV['DEBUG']
 
-  cell_config= YAML.load(File.read(config_path || File.join(Dir.pwd, 'config', 'cells.yml')))
-  ZygoteWeb::cell_config = cell_config
+  cell_config = YAML.load(File.read(config_path || File.join(Dir.pwd, 'config', 'cells.yml')))
+  ZygoteWeb.cell_config = cell_config
   zygote = Genesis::Reactor.new(
     threads: threads,
     protocols: {
       Genesis::Http::Protocol => port
     },
     handlers: [ZygoteWeb],
-    views: [File.expand_path('../../../views', __FILE__), cells ].flatten,
+    views: [File.expand_path('../../../views', __FILE__), cells].flatten,
     debug: debug
   )
   if debug

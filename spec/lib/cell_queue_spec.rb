@@ -8,7 +8,7 @@ RSpec.describe CellQueue do
   let(:sample_data) { { 'foo' => 'bar' } }
   let(:sample_data2) { { 'foo' => 'baz' } }
   let(:asset) { 'SPM-1234567' }
-  let(:asset2) {'SPM-2468101214'}
+  let(:asset2) { 'SPM-2468101214' }
 
   it 'pushes values' do
     expect(CellQueue.show(asset)).to be_empty

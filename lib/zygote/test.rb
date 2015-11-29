@@ -66,5 +66,4 @@ module Zygote
     q = params.to_query
     q.empty? ? '' : "?#{q}"
   end
-
 end

@@ -3,7 +3,7 @@ SimpleCov.start
 require 'yaml'
 require 'json'
 
-FIXTURES_PATH= File.expand_path('../../spec/fixtures', __FILE__)
+FIXTURES_PATH = File.expand_path('../../spec/fixtures', __FILE__)
 MOC_PARAMS = YAML.load(File.read(File.join(FIXTURES_PATH, 'params.yml')))
 
 ENV['TESTING'] = 'true'
