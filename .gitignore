@@ -1,0 +1,9 @@
+coverage
+config/secrets.json
+tmp
+tmp/client.pem
+spec/fixtures/memory.db
+data
+*.swp
+*.swo
+*.gem

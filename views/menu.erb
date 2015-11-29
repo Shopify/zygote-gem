@@ -1,0 +1,118 @@
+#!ipxe
+
+# This template is shamelessly ripped off from https://gist.github.com/robinsmidsrod/2234639
+# The most notable change is that we are of course dynamically generating the menu using cells.
+
+<% index = opts['index'] %>
+<% params = opts['params'] %>
+<% cells = index['cells'] %>
+
+# Allow bypassing the menu entirely by calling a specific target cell
+<% if selected_cell = params['selected_cell'] %>
+goto <%= selected_cell %>
+<% end %>
+
+###################### MAIN MENU ####################################
+
+set menu-timeout <%= (params['menu_timout'] || index['timeout']) * 1000 %> # timeout is in milliseconds, so let's take seconds instead.
+set submenu-timeout ${menu-timeout}
+set menu-default exit
+
+# This menu should be dynamically generated from cells, probably just make a metadata format
+
+:start
+menu iPXE boot menu for <%= params['sku'] || 'unknown' %> from <%= params['ip'] || 'unknown' %>
+<% os_entries = cells.select{ |_,d| d['menu']['class'] == 'os'} %>
+<% util_entries = cells.select{ |_,d| d['menu']['class'] == 'util'} %>
+item --gap --             ------------------------- OS Installation --------------------------------
+<% os_entries.each do | cell, data |  %>
+  <% menu = data['menu'] %>
+item --key <%= cell[0] %> <%= menu['submenu'] ? "submenu-#{cell}" : cell %> <%= menu['label'] %>
+<% end %>
+item --gap --             ------------------------- Tools and utilities ----------------------------
+<% util_entries.each do | cell, data |  %>
+  <% menu = data['menu'] %>
+item --key <%= cell[0] %> <%= cell %> <%= menu['label'] %>
+<% end %>
+item --gap --             ------------------------- Advanced opts -------------------------------
+item --key c config       Configure settings
+item shell                Drop to iPXE shell
+item reboot               Reboot computer
+item
+item --key x exit         Exit iPXE and continue BIOS boot
+choose --timeout ${menu-timeout} --default ${menu-default} selected || goto cancel
+set menu-timeout 0
+goto ${selected}
+
+# Generated menu entries for each cell
+<% cells.each do | cell, _ |  %>
+<%= partial("#{cell}/menu".to_sym, :opts => opts) %>
+<% end %>
+
+# Render any submenus
+<% submenus = cells.select{ |_,d| d['menu']['submenu'] } %>
+<% submenus.each do |cell, data| %>
+
+# Create the main submenu entry to render the submenu
+:submenu-<%= cell %>
+menu <%= data['menu']['label'] %>
+
+# Add each entry to the submenu
+  <% data['menu']['submenu'].each do |entry, data| %>
+item  <%= cell %>-<%= entry %> <%= data['label'] %>
+  <% end %>
+
+# Toss in the boilerplate footer
+item
+item --key 0x08 back      Back to top menu...
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected || goto start
+set submenu-timeout 0
+goto ${selected}
+
+# Now generate the boot entries for each submenu label
+  <% data['menu']['submenu'].each do |entry, data| %>
+    <% local_params = (data['params'] || {}).merge(params) %>
+    <% parmstr = {entry: entry}.merge(local_params).map{ |k,v| "#{k}=#{v}"}.join('&').gsub('?','').gsub(' ','') %>
+:<%= cell %>-<%= entry %>
+# FIXME: allow overriding the boot action here, but leave it as default
+chain --replace --autofree  http://${dhcp-server}/cell/<%= cell %>/boot<%= parmstr.empty? ? "" : "?#{parmstr}" %>
+  <% end %>
+<% end %>
+
+##########################################
+
+:cancel
+echo You cancelled the menu, dropping you to a shell
+
+:shell
+echo Type 'exit' to get the back to the menu
+shell
+set menu-timeout 0
+set submenu-timeout 0
+goto start
+
+:failed
+echo Booting failed, dropping to shell
+goto shell
+
+:reboot
+reboot
+
+:exit
+# On dell servers exit causes a PXE boot loop.
+# This tells the server to boot from first drive instead
+# http://ipxe.org/cmd/sanboot
+# http://ipxe.org/appnote/work_around_bios_halting_on_ipxe_exit
+
+sanboot --no-describe --drive 0x80
+#exit
+
+:config
+config
+goto start
+
+:back
+set submenu-timeout 0
+clear submenu-default
+goto start
+

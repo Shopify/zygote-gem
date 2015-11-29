@@ -1,0 +1,9 @@
+index:
+  timeout: 0 # timeout in seconds, 0 for none
+  cells:
+    test:
+      menu:
+        class: util
+        label: "Boot Alchemy Linux"
+      args:
+        kernel_params: net real_init=/sbin/init
