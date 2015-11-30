@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    zygote (0.0.1)
+    zygote (0.0.2)
       chef-provisioner (= 0.0.8)
       em-http-request (= 1.1.2)
       genesisreactor (= 0.0.5)
