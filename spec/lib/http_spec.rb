@@ -95,7 +95,6 @@ RSpec.describe ZygoteWeb do
   end
 
   context 'menu' do
-
     it 'can render top level menus' do
       rendered_menu = get('/chain', MOC_PARAMS['routing']['chain']).response
       ZygoteWeb.cell_config['index']['cells'].each do |menu, data|
@@ -148,5 +147,13 @@ RSpec.describe ZygoteWeb do
       end
     end
 
+    it 'deep merges menu args into submenus' do
+      nested = ZygoteWeb.cell_config['index']['cells']['nested']
+      nested['menu']['submenu'].each do |_entry, subdata|
+        expect(subdata['args']['foo']).to eq('bar')
+        expect(subdata['args']['data']).to_not eq('shadowed')
+        expect(subdata['args']['data']).to eq('value')
+      end
+    end
   end
 end

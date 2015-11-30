@@ -14,6 +14,9 @@ index:
       args:
         data: value
     nested:
+      args:
+        data: shadowed
+        foo: bar
       menu:
         class: os
         label: "Menu with submenu"

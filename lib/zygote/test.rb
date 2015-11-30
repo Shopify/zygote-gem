@@ -7,7 +7,6 @@ require 'em-synchrony'
 require 'em-synchrony/em-http'
 
 module Zygote
-
   module TestConfig
     extend self
     attr_reader :config_path, :cells, :port, :fixtures
