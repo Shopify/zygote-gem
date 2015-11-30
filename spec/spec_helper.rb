@@ -3,15 +3,15 @@ SimpleCov.start
 require 'yaml'
 require 'json'
 
-FIXTURES_PATH = File.expand_path('../../spec/fixtures', __FILE__)
-MOC_PARAMS = YAML.load(File.read(File.join(FIXTURES_PATH, 'params.yml')))
-
-ENV['TESTING'] = 'true'
-ENV['DATABASE_PATH'] = File.join(FIXTURES_PATH, 'memory.db')
-
-require File.expand_path('../../lib/zygote.rb', __FILE__)
 require 'zygote/test'
 include Zygote
+TestConfig.setup
+
+ENV['TESTING'] = 'true'
+ENV['DATABASE_PATH'] = File.join(TestConfig.fixtures, 'memory.db')
+MOC_PARAMS = YAML.load(File.read(File.join(TestConfig.fixtures, 'params.yml')))
+
+require File.expand_path('../../lib/zygote.rb', __FILE__)
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

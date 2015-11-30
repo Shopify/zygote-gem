@@ -7,6 +7,18 @@ require 'em-synchrony'
 require 'em-synchrony/em-http'
 
 module Zygote
+
+  module TestConfig
+    extend self
+    attr_reader :config_path, :cells, :port, :fixtures
+    def setup(fixtures: fixtures, config_path: config_path, cells: cells, port: port)
+      @fixtures = fixtures || File.expand_path('../../../spec/fixtures', __FILE__)
+      @config_path = config_path || File.join(@fixtures, 'cells.yml')
+      @cells = cells || File.join(@fixtures, 'cells')
+      @port = port || 7000
+    end
+  end
+
   # Run within synchrony block to prevent blocking
   module ZygoteSpec
     def self.append_features(mod)
@@ -14,8 +26,8 @@ module Zygote
         around(:each) do |example|
           EM.synchrony do
             zygote(
-              config_path: File.join(FIXTURES_PATH, 'cells.yml'),
-              cells: File.join(FIXTURES_PATH, 'cells')
+              config_path: TestConfig.config_path,
+              cells: TestConfig.cells
             ).start
             example.run
             EM.stop
@@ -30,7 +42,7 @@ module Zygote
     def self.append_features(mod)
       mod.class_eval %[
         around(:each) do |example|
-          seed = File.join(FIXTURES_PATH, 'memory_seed.db')
+          seed = File.join(TestConfig.fixtures, 'memory_seed.db')
           FileUtils.cp(seed, ENV['DATABASE_PATH'])
           Memory::load
           example.run
@@ -40,7 +52,7 @@ module Zygote
   end
 
   def match_fixture(name, actual)
-    path = File.join(FIXTURES_PATH, 'data', "#{name}.txt")
+    path = File.join(TestConfig.fixtures, 'data', "#{name}.txt")
     File.open(path, 'w') { |f| f.write(actual) } if ENV['FIXTURE_RECORD']
     expect(actual).to eq(File.read(path))
   end
@@ -48,18 +60,18 @@ module Zygote
   # Returns EventMachine::HttpClient
   def get(uri, params = {})
     uriq = "#{uri}#{parameterize(params)}"
-    EM::Synchrony.sync(EventMachine::HttpRequest.new(File.join("http://#{Socket.gethostname}:7000/", uriq)).aget(query: params))
+    EM::Synchrony.sync(EventMachine::HttpRequest.new(File.join("http://#{Socket.gethostname}:#{TestConfig.port}/", uriq)).aget(query: params))
   end
 
   # Returns EventMachine::HttpClient
   def delete(uri, params = {})
     uriq = "#{uri}#{parameterize(params)}"
-    EM::Synchrony.sync(EventMachine::HttpRequest.new(File.join("http://#{Socket.gethostname}:7000/", uriq)).adelete(query: params))
+    EM::Synchrony.sync(EventMachine::HttpRequest.new(File.join("http://#{Socket.gethostname}:#{TestConfig.port}/", uriq)).adelete(query: params))
   end
 
   # Returns EventMachine::HttpClient
   def post(uri, params = {})
-    EM::Synchrony.sync(EventMachine::HttpRequest.new("http://#{Socket.gethostname}:7000/#{uri}").apost(body: params))
+    EM::Synchrony.sync(EventMachine::HttpRequest.new("http://#{Socket.gethostname}:#{TestConfig.port}/#{uri}").apost(body: params))
   end
 
   def parameterize(params)
