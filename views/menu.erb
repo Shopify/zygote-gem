@@ -44,9 +44,12 @@ choose --timeout ${menu-timeout} --default ${menu-default} selected || goto canc
 set menu-timeout 0
 goto ${selected}
 
-# Generated menu entries for each cell
-<% cells.each do | cell, _ |  %>
-<%= partial("#{cell}/menu".to_sym, :opts => opts) %>
+# Generated chain entries for each top-level menu
+<% cells.each do | cell, data |  %>
+  <% unless data['menu']['submenu'] %>
+:<%= cell %>
+chain --replace --autofree  http://${dhcp-server}/cell/<%= cell %>/<%= data['menu']['action'] || 'boot' %><%= params.to_query.empty? ? "" : "?#{params.to_query}" %>
+  <% end %>
 <% end %>
 
 # Render any submenus
@@ -69,13 +72,12 @@ choose --timeout ${submenu-timeout} --default ${submenu-default} selected || got
 set submenu-timeout 0
 goto ${selected}
 
-# Now generate the boot entries for each submenu label
+# Generate chains for each submenu entry
   <% data['menu']['submenu'].each do |entry, data| %>
     <% local_params = (data['params'] || {}).merge(params) %>
     <% parmstr = {entry: entry}.merge(local_params).map{ |k,v| "#{k}=#{v}"}.join('&').gsub('?','').gsub(' ','') %>
 :<%= cell %>-<%= entry %>
-# FIXME: allow overriding the boot action here, but leave it as default
-chain --replace --autofree  http://${dhcp-server}/cell/<%= cell %>/boot<%= parmstr.empty? ? "" : "?#{parmstr}" %>
+chain --replace --autofree  http://${dhcp-server}/cell/<%= cell %><%= data['action'] || 'boot' %><%= parmstr.empty? ? "" : "?#{parmstr}" %>
   <% end %>
 <% end %>
 
@@ -115,4 +117,3 @@ goto start
 set submenu-timeout 0
 clear submenu-default
 goto start
-

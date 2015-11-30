@@ -1,1 +1,1 @@
-test with params action=test&cell=test&foo=bar&spam=eggs
+test with params action=test&cell=test_os&foo=bar&spam=eggs

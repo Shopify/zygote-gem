@@ -1,9 +1,24 @@
 index:
   timeout: 0 # timeout in seconds, 0 for none
   cells:
-    test:
+    test_os:
+      menu:
+        class: os
+        label: "OS Entry"
+      args:
+        data: value
+    test_util:
       menu:
         class: util
-        label: "Boot Alchemy Linux"
+        label: "Utility entry"
       args:
-        kernel_params: net real_init=/sbin/init
+        data: value
+    nested:
+      menu:
+        class: os
+        label: "Menu with submenu"
+        submenu:
+          main_entry:
+            label: "Submenu entry"
+            args:
+              data: value

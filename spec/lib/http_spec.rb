@@ -13,8 +13,8 @@ RSpec.describe ZygoteWeb do
       match_fixture('ipxe_menu', get('/chain', MOC_PARAMS['routing']['chain']).response)
     end
 
-    it 'renders /cell/test/test' do
-      match_fixture('cell_test_action', get('/cell/test/test', MOC_PARAMS['routing']['cell_test']).response)
+    it 'renders /cell/test_os/test' do
+      match_fixture('cell_test_action', get('/cell/test_os/test', MOC_PARAMS['routing']['cell_test']).response)
     end
   end
 
@@ -92,5 +92,37 @@ RSpec.describe ZygoteWeb do
       end
       expect(JSON.parse(get("/queue/#{asset}").response)).to be_empty
     end
+  end
+
+  context 'menu' do
+
+    it 'can render top level menus' do
+      rendered_menu = get('/chain', MOC_PARAMS['routing']['chain']).response
+      ZygoteWeb.cell_config['index']['cells'].each do |menu, data|
+        symbol = data['menu']['submenu'] ? "submenu-#{menu}" : menu
+        expect(rendered_menu).to match(/^item --key #{menu[0]} #{symbol} #{data['menu']['label']}$/)
+      end
+    end
+
+    it 'can render top level menus by class' do
+      rendered_menu = get('/chain', MOC_PARAMS['routing']['chain']).response
+      ZygoteWeb.cell_config['index']['cells'].each do |menu, data|
+        symbol = data['menu']['submenu'] ? "submenu-#{menu}" : menu
+        expect(rendered_menu).to match(/OS Installation.*item --key #{menu[0]} #{symbol} #{data['menu']['label']}/m) if data['menu']['class'] == 'os'
+        expect(rendered_menu).to match(/Tools and utilities.*item --key #{menu[0]} #{symbol} #{data['menu']['label']}/m) if data['menu']['class'] == 'util'
+      end
+    end
+
+    it 'can render submenus' do
+      rendered_menu = get('/chain', MOC_PARAMS['routing']['chain']).response
+      ZygoteWeb.cell_config['index']['cells'].each do |menu, data|
+        if data['menu']['submenu']
+          symbol = data['menu']['submenu'] ? "submenu-#{menu}" : menu
+          expect(rendered_menu).to match(/OS Installation.*item --key #{menu[0]} #{symbol} #{data['menu']['label']}/m) if data['menu']['class'] == 'os'
+          expect(rendered_menu).to match(/Tools and utilities.*item --key #{menu[0]} #{symbol} #{data['menu']['label']}/m) if data['menu']['class'] == 'util'
+        end
+      end
+    end
+
   end
 end

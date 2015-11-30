@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.email       = 'dale.hamel@srvthe.net'
   s.files       = Dir['lib/**/*', 'views/**/*']
   s.homepage    =
-    'http://rubygems.org/gems/zygote'
+    'https://github.com/dalehamel/zygote-gem'
   s.license       = 'MIT'
   s.add_runtime_dependency 'chef-provisioner', ['=0.0.8']
   s.add_runtime_dependency 'genesisreactor', ['=0.0.5']
