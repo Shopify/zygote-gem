@@ -34,3 +34,7 @@ end
 def discover_domain
   Socket.gethostname.split('.')[1..-1].join('.')
 end
+
+def kernel_params(hash)
+  hash.map{ |k,v| v == true ? k : "#{k}=#{v}" }.join(' ')
+end

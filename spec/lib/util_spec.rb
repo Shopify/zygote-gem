@@ -35,4 +35,21 @@ RSpec.describe 'utility class' do
       expect(compute_sku(supermicro, serial, '')).to eq("SPM-#{serial}")
     end
   end
+
+  context 'kernel params' do
+    let(:keyvalue){ { "boot"=>"live", "root"=>"/dev/ram0" } }
+    let(:present){ { "live" => true } }
+
+    it 'maps hashes' do
+      expect(kernel_params(keyvalue)).to eq('boot=live root=/dev/ram0')
+    end
+
+    it 'flags if true' do
+      expect(kernel_params(present)).to eq('live')
+    end
+
+    it 'handles flags and hashes' do
+      expect(kernel_params(keyvalue.merge(present))).to eq('boot=live root=/dev/ram0 live')
+    end
+  end
 end
