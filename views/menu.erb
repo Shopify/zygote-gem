@@ -77,7 +77,7 @@ goto ${selected}
     <% local_params = (data['params'] || {}).merge(params) %>
     <% parmstr = {entry: entry}.merge(local_params).map{ |k,v| "#{k}=#{v}"}.join('&').gsub('?','').gsub(' ','') %>
 :<%= cell %>-<%= entry %>
-chain --replace --autofree  http://${dhcp-server}/cell/<%= cell %><%= data['action'] || 'boot' %><%= parmstr.empty? ? "" : "?#{parmstr}" %>
+chain --replace --autofree  http://${dhcp-server}/cell/<%= cell %>/<%= data['action'] || 'boot' %><%= parmstr.empty? ? "" : "?#{parmstr}" %>
   <% end %>
 <% end %>
 

@@ -104,6 +104,15 @@ RSpec.describe ZygoteWeb do
       end
     end
 
+    it 'can render menus chains' do
+      rendered_menu = get('/chain', MOC_PARAMS['routing']['chain']).response
+      ZygoteWeb.cell_config['index']['cells'].each do |menu, data|
+        unless data['menu']['submenu']
+          expect(rendered_menu).to match(/:#{menu}\nchain --replace --autofree\s+http:\/\/\${dhcp-server}\/cell\/#{menu}\/#{data['action'] || 'boot'}/m)
+        end
+      end
+    end
+
     it 'can render top level menus by class' do
       rendered_menu = get('/chain', MOC_PARAMS['routing']['chain']).response
       ZygoteWeb.cell_config['index']['cells'].each do |menu, data|
@@ -112,7 +121,9 @@ RSpec.describe ZygoteWeb do
         expect(rendered_menu).to match(/Tools and utilities.*item --key #{menu[0]} #{symbol} #{data['menu']['label']}/m) if data['menu']['class'] == 'util'
       end
     end
+  end
 
+  context 'submenus' do
     it 'can render submenus' do
       rendered_menu = get('/chain', MOC_PARAMS['routing']['chain']).response
       ZygoteWeb.cell_config['index']['cells'].each do |menu, data|
@@ -120,7 +131,20 @@ RSpec.describe ZygoteWeb do
           symbol = data['menu']['submenu'] ? "submenu-#{menu}" : menu
           expect(rendered_menu).to match(/OS Installation.*item --key #{menu[0]} #{symbol} #{data['menu']['label']}/m) if data['menu']['class'] == 'os'
           expect(rendered_menu).to match(/Tools and utilities.*item --key #{menu[0]} #{symbol} #{data['menu']['label']}/m) if data['menu']['class'] == 'util'
+          expect(rendered_menu).to match(/^:submenu-#{menu}\nmenu #{data['menu']['label']}/)
+          data['menu']['submenu'].each do |entry, subdata|
+            expect(rendered_menu).to match(/^item\s+#{menu}-#{entry}\s+#{subdata['label']}/)
+          end
         end
+      end
+    end
+
+    it 'can render submenu chains' do
+      rendered_menu = get('/chain', MOC_PARAMS['routing']['chain']).response
+      ZygoteWeb.cell_config['index']['cells'].each do |menu, data|
+        data['menu']['submenu'].each do |entry, subdata|
+          expect(rendered_menu).to match(/:#{menu}-#{entry}\nchain --replace --autofree\s+http:\/\/\${dhcp-server}\/cell\/#{menu}\/#{subdata['action'] || 'boot'}/m)
+        end if data['menu']['submenu']
       end
     end
 

@@ -68,7 +68,7 @@ goto ${selected}
     
     
 :nested-main_entry
-chain --replace --autofree  http://${dhcp-server}/cell/nestedboot?entry=main_entry&dhcp-server=172.16.2.4&mac=0c:c4:7a:05:77:1a&serial=S15500224715585&product=SYS-2027PR-HTTR&manufacturer=Supermicro&board-serial=ZM143S050147&board-product=X9DRT-PT&ip=127.0.0.1&sku=SPM-ZM143S050147
+chain --replace --autofree  http://${dhcp-server}/cell/nested/boot?entry=main_entry&dhcp-server=172.16.2.4&mac=0c:c4:7a:05:77:1a&serial=S15500224715585&product=SYS-2027PR-HTTR&manufacturer=Supermicro&board-serial=ZM143S050147&board-product=X9DRT-PT&ip=127.0.0.1&sku=SPM-ZM143S050147
   
 
 ##########################################
