@@ -98,15 +98,6 @@ class ZygoteWeb < Genesis::Http::Handler
    end
 
   def self::cell_config=(value)
-    # Merge common args into submenus
-    value['index']['cells'].each do |_cell, data|
-      if data['args'] && data['menu']['submenu']
-        common_args = data['args']
-        data['menu']['submenu'].each do |_, subdata|
-          subdata['args'] = common_args.deep_merge(subdata['args'] || {})
-        end
-      end
-    end
     @@cell_config = value
   end
 end

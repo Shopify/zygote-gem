@@ -146,14 +146,5 @@ RSpec.describe ZygoteWeb do
         end if data['menu']['submenu']
       end
     end
-
-    it 'deep merges menu args into submenus' do
-      nested = ZygoteWeb.cell_config['index']['cells']['nested']
-      nested['menu']['submenu'].each do |_entry, subdata|
-        expect(subdata['args']['foo']).to eq('bar')
-        expect(subdata['args']['data']).to_not eq('shadowed')
-        expect(subdata['args']['data']).to eq('value')
-      end
-    end
   end
 end
