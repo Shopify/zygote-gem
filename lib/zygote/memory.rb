@@ -8,7 +8,7 @@ require 'supermodel'
 # https://github.com/maccman/supermodel/blob/master/README
 module Memory
   extend self
-  DATABASE_PATH = (ENV['DATABASE_PATH'] || File.expand_path('../../data/memory.db', __FILE__)).freeze
+  DATABASE_PATH = (ENV['DATABASE_PATH'] || File.expand_path('../data/memory.db', $0)).freeze
   SuperModel::Marshal.path = DATABASE_PATH
 
   def save
