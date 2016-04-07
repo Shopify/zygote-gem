@@ -38,16 +38,18 @@ class ZygoteWeb < Sinatra::Base
     body { erb :menu, locals: { opts: ZygoteWeb.cell_config.merge('params' => cleaned || {}) } }
   end
 
-  # Render an action for a particular cell
-  aget %r{/cell/(?<cell>\S*)/(?<action>\S*)$} do
-    # Clean params into a simple hash
-    cleaned = clean_params(params.to_h)
-    # Add the cell to the parameters
-    cell = cleaned['cell']
-    # Merge the cleaned params in with any cell options
-    cell_opts = ZygoteWeb.cell_config['index']['cells'][cell] || {}
-    opts = cell_opts.merge('params' => cleaned || {})
-    body { erb :"#{cell}/#{cleaned['action']}".to_sym, locals: { opts: opts } }
+  [ :aget, :apost ].each do |method|
+    send method, %r{/cell/(?<cell>\S*)/(?<action>\S*)$} do
+      # Render an action for a particular cell
+      # Clean params into a simple hash
+      cleaned = clean_params(params.to_h)
+      # Add the cell to the parameters
+      cell = cleaned['cell']
+      # Merge the cleaned params in with any cell options
+      cell_opts = ZygoteWeb.cell_config['index']['cells'][cell] || {}
+      opts = cell_opts.merge('params' => cleaned || {})
+      body { erb :"#{cell}/#{cleaned['action']}".to_sym, locals: { opts: opts } }
+    end
   end
 
   # Show the queue for a SKU
