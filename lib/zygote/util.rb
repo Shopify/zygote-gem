@@ -9,14 +9,14 @@ def compute_sku(vendor, serial, board_serial)
 
   serial = board_serial unless board_serial.empty?
 
-  case vendor
-  when 'DellInc'
-    sku = 'DEL'
-  when 'Supermicro'
-    sku = 'SPM'
-  else
-    sku = 'UKN' # unknown manufacturer
-  end
+  sku = case vendor
+        when 'DellInc'
+          'DEL'
+        when 'Supermicro'
+          'SPM'
+        else
+          'UKN' # unknown manufacturer
+        end
 
   sku = "#{sku}-#{serial}"
   sku
@@ -36,5 +36,5 @@ def discover_domain
 end
 
 def kernel_params(hash)
-  hash.map{ |k,v| v == true ? k : "#{k}=#{v}" }.join(' ')
+  hash.map { |k, v| v == true ? k : "#{k}=#{v}" }.join(' ')
 end
