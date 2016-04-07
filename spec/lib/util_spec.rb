@@ -37,8 +37,8 @@ RSpec.describe 'utility class' do
   end
 
   context 'kernel params' do
-    let(:keyvalue){ { "boot"=>"live", "root"=>"/dev/ram0" } }
-    let(:present){ { "live" => true } }
+    let(:keyvalue) { { 'boot' => 'live', 'root' => '/dev/ram0' } }
+    let(:present) { { 'live' => true } }
 
     it 'maps hashes' do
       expect(kernel_params(keyvalue)).to eq('boot=live root=/dev/ram0')

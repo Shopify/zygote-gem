@@ -24,7 +24,7 @@ module Zygote
       mod.class_eval %[
         around(:each) do |example|
           EM.synchrony do
-            zygote(
+            ZygoteServer.new(
               config_path: TestConfig.config_path,
               cells: TestConfig.cells
             ).start
@@ -59,18 +59,18 @@ module Zygote
   # Returns EventMachine::HttpClient
   def get(uri, params = {})
     uriq = "#{uri}#{parameterize(params)}"
-    EM::Synchrony.sync(EventMachine::HttpRequest.new(File.join("http://#{Socket.gethostname}:#{TestConfig.port}/", uriq)).aget(query: params))
+    EM::Synchrony.sync(EventMachine::HttpRequest.new(File.join("http://127.0.0.1:#{TestConfig.port}/", uriq)).aget(query: params))
   end
 
   # Returns EventMachine::HttpClient
   def delete(uri, params = {})
     uriq = "#{uri}#{parameterize(params)}"
-    EM::Synchrony.sync(EventMachine::HttpRequest.new(File.join("http://#{Socket.gethostname}:#{TestConfig.port}/", uriq)).adelete(query: params))
+    EM::Synchrony.sync(EventMachine::HttpRequest.new(File.join("http://127.0.0.1:#{TestConfig.port}/", uriq)).adelete(query: params))
   end
 
   # Returns EventMachine::HttpClient
   def post(uri, params = {})
-    EM::Synchrony.sync(EventMachine::HttpRequest.new("http://#{Socket.gethostname}:#{TestConfig.port}/#{uri}").apost(body: params))
+    EM::Synchrony.sync(EventMachine::HttpRequest.new("http://127.0.0.1:#{TestConfig.port}/#{uri}").apost(body: params))
   end
 
   def parameterize(params)

@@ -13,11 +13,13 @@ Gem::Specification.new do |s|
   s.files       = Dir['lib/**/*', 'views/**/*']
   s.homepage    =
     'https://github.com/dalehamel/zygote-gem'
-  s.license       = 'MIT'
-  s.add_runtime_dependency 'chef-provisioner', ['=0.1.7']
-  s.add_runtime_dependency 'genesisreactor', ['=0.0.5']
+  s.license = 'MIT'
+  s.add_runtime_dependency 'chef-provisioner', ['=0.2.0']
   s.add_runtime_dependency 'supermodel', ['=0.1.6']
   s.add_runtime_dependency 'em-http-request', ['=1.1.2']
+  s.add_runtime_dependency 'async_sinatra', ['=1.2.1']
+  s.add_runtime_dependency 'em-synchrony', ['=1.0.4']
+  s.add_runtime_dependency 'thin', ['>= 1.6.4']
   s.add_development_dependency 'pry', ['=0.10.3']
   s.add_development_dependency 'pry-byebug', ['=3.3.0']
   s.add_development_dependency 'rake', ['=10.4.2']
