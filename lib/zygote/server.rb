@@ -25,6 +25,9 @@ class ZygoteServer
 
   def start
     @server.start
+  rescue => ex
+    puts ex
+    puts ex.backtrace.join("\n")
   end
 
   def run

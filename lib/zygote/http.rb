@@ -15,7 +15,12 @@ class ZygoteWeb < Sinatra::Base
   register Sinatra::Async
 
   use ::Rack::PostBodyContentTypeParser
-  set :show_exceptions, ENV['DEBUG'] || false
+
+  # Throw exceptions so we can catch and nicely log them
+  set :raise_errors, true
+  set :show_exceptions, false
+  set :dump_errors, false
+
   # Requested by iPXE on boot, chains into /boot.
   # This enables us to customize what details we want iPXE to send us
   # The iPXE undionly.kpxe should contain an embedded script to call this URL
