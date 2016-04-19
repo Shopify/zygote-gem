@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'async_sinatra', ['=1.2.1']
   s.add_runtime_dependency 'em-synchrony', ['=1.0.4']
   s.add_runtime_dependency 'thin', ['>= 1.6.4']
+  s.add_runtime_dependency 'rack-contrib', ['>= 1.4.0']
   s.add_development_dependency 'pry', ['=0.10.3']
   s.add_development_dependency 'pry-byebug', ['=3.3.0']
   s.add_development_dependency 'rake', ['=10.4.2']

@@ -4,6 +4,7 @@ require 'json'
 require 'active_support/all'
 require 'sinatra/async'
 require 'tilt/erubis'
+require 'rack/contrib'
 
 require 'zygote/util'
 require 'zygote/cell_queue'
@@ -13,6 +14,7 @@ require 'zygote/cell_queue'
 class ZygoteWeb < Sinatra::Base
   register Sinatra::Async
 
+  use ::Rack::PostBodyContentTypeParser
   set :show_exceptions, ENV['DEBUG'] || false
   # Requested by iPXE on boot, chains into /boot.
   # This enables us to customize what details we want iPXE to send us
