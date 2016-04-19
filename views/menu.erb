@@ -75,7 +75,7 @@ goto ${selected}
 # Generate chains for each submenu entry
   <% data['menu']['submenu'].each do |entry, data| %>
     <% local_params = (data['params'] || {}).merge(params) %>
-    <% parmstr = {entry: entry}.merge(local_params).map{ |k,v| "#{k}=#{v}"}.join('&').gsub('?','').gsub(' ','') %>
+    <% parmstr = {entry: entry}.merge(local_params).map{ |k,v| "#{k}=#{v.is_a?(String) ? v : Base64.encode64(JSON.dump(v)).gsub(/\n|=/, '')}"}.join('&').gsub('?','').gsub(' ','') %>
 :<%= cell %>-<%= entry %>
 chain --replace --autofree  http://${dhcp-server}/cell/<%= cell %>/<%= data['action'] || 'boot' %><%= parmstr.empty? ? "" : "?#{parmstr}" %>
   <% end %>
