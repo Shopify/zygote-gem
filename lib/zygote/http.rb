@@ -73,18 +73,6 @@ class ZygoteWeb < Sinatra::Base
     body { JSON.pretty_generate(CellQueue.show(params['sku'])) }
   end
 
-  apost %r{/queue/bulk$} do
-    bulk_queue = JSON.parse(request.body.read)
-    bulk_queue.each do |asset, queue|
-      queue = [queue] unless queue.is_a?(Array)
-      queue.each do |action|
-        CellQueue.push(asset, action)
-      end
-    end
-
-    200
-  end
-
   # Enable push cells (with optional data) to the cell queue for a SKU
   apost %r{/queue/(?<sku>\S*)/(?<selected_cell>\S*)$} do
     # Clean params into a simple hash

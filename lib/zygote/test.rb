@@ -70,7 +70,7 @@ module Zygote
 
   # Returns EventMachine::HttpClient
   def post(uri, params = {})
-    EM::Synchrony.sync(EventMachine::HttpRequest.new("http://127.0.0.1:#{TestConfig.port}/#{uri}").apost(body: params))
+    EM::Synchrony.sync(EventMachine::HttpRequest.new("http://127.0.0.1:#{TestConfig.port}/#{uri}").apost(body: JSON.dump(params), head: {'Content-Type' => 'application/json'}))
   end
 
   def parameterize(params)

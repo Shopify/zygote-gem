@@ -55,7 +55,7 @@ goto ${selected}
 
 # Generate chains for each submenu entry
 :nested-main_entry
-chain --replace --autofree  http://${dhcp-server}/cell/nested/boot?entry=main_entry&dhcp-server=172.16.2.4&mac=0c:c4:7a:05:77:1a&serial=S15500224715585&product=SYS-2027PR-HTTR&manufacturer=Supermicro&board-serial=ZM143S050147&board-product=X9DRT-PT&ip=127.0.0.1&sku=SPM-ZM143S050147
+chain --replace --autofree  http://${dhcp-server}/cell/nested/boot?board-product=X9DRT-PT&board-serial=ZM143S050147&dhcp-server=172.16.2.4&entry=main_entry&ip=127.0.0.1&mac=0c%3Ac4%3A7a%3A05%3A77%3A1a&manufacturer=Supermicro&product=SYS-2027PR-HTTR&serial=S15500224715585&sku=SPM-ZM143S050147
 
 ##########################################
 

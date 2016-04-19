@@ -1,4 +1,6 @@
 require 'socket'
+require 'base64'
+require 'json'
 
 def compute_sku(vendor, serial, board_serial)
   # Sanitize params
@@ -24,7 +26,12 @@ end
 
 def clean_params(params)
   params.delete_if { |x, _| x == 'splat' || x == 'captures' }
+  params = params.map { |k,v| [k, v.is_a?(Hash) ? encode64(v) : v] }.to_h
   params
+end
+
+def encode64(content)
+  Base64.encode64(JSON.pretty_generate(content)).gsub(/\n|=/, '')
 end
 
 def my_ip

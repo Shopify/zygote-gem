@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    zygote (0.2.4)
+    zygote (0.2.5)
       async_sinatra (= 1.2.1)
       chef-provisioner (= 0.2.0)
       em-http-request (= 1.1.2)

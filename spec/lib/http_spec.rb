@@ -46,8 +46,8 @@ RSpec.describe ZygoteWeb do
 
     it 'Shows ordered cell data' do
       enqueue_data
-      expect(JSON.parse(get("/queue/#{asset}").response).first).to eq(payload.merge('selected_cell' => cell, 'index' => 1.to_s))
-      expect(JSON.parse(get("/queue/#{asset}").response).last).to eq(payload.merge('selected_cell' => cell, 'index' => count.to_s))
+      expect(JSON.parse(get("/queue/#{asset}").response).first).to eq(payload.merge('selected_cell' => cell, 'index' => 1))
+      expect(JSON.parse(get("/queue/#{asset}").response).last).to eq(payload.merge('selected_cell' => cell, 'index' => count))
     end
 
     it 'Can purge the queue' do
@@ -66,31 +66,23 @@ RSpec.describe ZygoteWeb do
       expect(response[asset2]).to_not be_nil
     end
 
-    it 'can do a bulk queue' do
-      bulk_queue = {
-        asset => payload.merge('selected_cell' => cell, 'index' => '1'),
-        asset2 => [
-          payload.merge('selected_cell' => 'burnin', 'index' => '1'),
-          payload.merge('selected_cell' => 'default ubuntu', 'index' => '2')
-        ]
-      }
-      post('/queue/bulk', bulk_queue.to_json)
-
-      expect(JSON.parse(get("/queue/#{asset}").response).first).to eq(payload.merge('selected_cell' => cell, 'index' => 1.to_s))
-      expect(JSON.parse(get("/queue/#{asset2}").response).first).to eq(payload.merge('selected_cell' => 'burnin', 'index' => 1.to_s))
-    end
-
     # Can render default entries
     it 'Pops the queue onto /chain' do
       (1..count).to_a.each do |i|
-        post("/queue/#{asset}/#{cell}", payload.merge('index' => i))
+        post("/queue/#{asset}/#{cell}", payload: payload.merge('index' => i))
       end
       (1..count).to_a.each do |i|
         menu = get('/chain', manufacturer: 'Supermicro', serial: '1234567').response
-        expect(menu).to include(payload.merge('index' => i).to_query)
+        expect(menu).to include("payload=#{encode64(payload.merge('index' => i))}")
         expect(menu).to include("goto #{payload['select_cell']}")
       end
       expect(JSON.parse(get("/queue/#{asset}").response)).to be_empty
+    end
+
+    it 'Encodes complex structures in base64 encoded JSON' do
+      post("/queue/#{asset}/#{cell}", payload: payload)
+      menu = get('/chain', manufacturer: 'Supermicro', serial: '1234567').response
+      expect(menu).to include("payload=#{encode64(payload)}")
     end
   end
 
