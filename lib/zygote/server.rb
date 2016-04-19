@@ -19,6 +19,7 @@ class ZygoteServer
         run app
       end
     end
+    Thin::Logging.trace=true if debug
     @server = Thin::Server.new(port, host, dispatch, threadpool_size: threads).backend
   end
 
