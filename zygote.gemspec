@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.homepage    =
     'https://github.com/dalehamel/zygote-gem'
   s.license = 'MIT'
-  s.add_runtime_dependency 'chef-provisioner', ['=0.2.0']
+  s.add_runtime_dependency 'erubis', ['=2.7.0']
   s.add_runtime_dependency 'supermodel', ['=0.1.6']
   s.add_runtime_dependency 'em-http-request', ['=1.1.2']
   s.add_runtime_dependency 'async_sinatra', ['=1.2.1']
