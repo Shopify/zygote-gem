@@ -34,6 +34,10 @@ def encode64(content)
   Base64.encode64(JSON.pretty_generate(content)).gsub(/\n|=/, '')
 end
 
+def decode64(content)
+  JSON.load(Base64.decode64(content))
+end
+
 def my_ip
   Socket.ip_address_list.find { |x| x.ipv4? && !x.ipv4_loopback? }.ip_address
 end
