@@ -107,7 +107,7 @@ class ZygoteWeb < Sinatra::Base
   helpers do
     # Enable partial template rendering
     def partial(template, locals = {})
-      erb(template, layout: false, locals: locals)
+      erb(template.to_sym, layout: false, locals: locals)
     end
 
     # Override template search directorys to add spells
