@@ -10,7 +10,7 @@ module Zygote
   module TestConfig
     extend self
     attr_reader :config_path, :cells, :port, :fixtures
-    def setup(fixtures: fixtures, config_path: config_path, cells: cells, port: port)
+    def setup(fixtures: nil, config_path: nil, cells: nil, port: nil)
       @fixtures = fixtures || File.expand_path('../../../spec/fixtures', __FILE__)
       @config_path = config_path || File.join(@fixtures, 'cells.yml')
       @cells = cells || File.join(@fixtures, 'cells')
