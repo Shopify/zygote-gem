@@ -41,5 +41,4 @@ end
 def init_sighandlers
   Signal.trap('INT')  { 'Got interrupt'; EM.stop; exit }
   Signal.trap('TERM') { 'Got term';      EM.stop; exit }
-  Signal.trap('KILL') { 'Got kill';      EM.stop; exit }
 end
