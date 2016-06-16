@@ -40,14 +40,14 @@ module Zygote
       end
     end
   end
+end
 
-  def init_sighandlers
-    clean_quit = lambda do
-      EM.stop
-      exit
-    end
-
-    Signal.trap('INT') { clean_quit.call }
-    Signal.trap('TERM') { clean_quit.call }
+def init_sighandlers
+  clean_quit = lambda do
+    EM.stop
+    exit
   end
+
+  Signal.trap('INT') { clean_quit.call }
+  Signal.trap('TERM') { clean_quit.call }
 end
