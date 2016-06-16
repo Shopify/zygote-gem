@@ -78,7 +78,7 @@ module Zygote
       body { JSON.pretty_generate(response) }
     end
 
-        # Delete the queue for a SKU
+    # Delete the queue for a SKU
     adelete %r{/queue$} do
       CellQueue.purge(params['sku'])
       body { JSON.pretty_generate(CellQueue.show(params['sku'])) }

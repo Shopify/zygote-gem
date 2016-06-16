@@ -5,3 +5,6 @@ rvm:
   - 2.3.0
 env:
   - RACK_ENV=development
+script:
+  - bundle exec rubocop
+  - bundle exec rake spec
