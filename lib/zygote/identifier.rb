@@ -1,29 +1,33 @@
 module Zygote
 
   # Provides a hook for identifiers to alter boot-time behavior
-  # To do so, extend this class with a new identify method, then
-  # set the identifier to that method name.
-  # module Zygote; module; Identifier
-  # def my_identifier(params)
-  #   mutate_params(params)
+  # To do so, extend this class with a new identify method.
+  # You may NOT define more than one identifier - the last one wins.
+  # class MyIdentifier < Zygote::Identifier
+  #   def identify
+  #     mutate_params(@params)
+  #   end
   # end
-  # end; end
-  # Zygote::Identifier.identifier = :my_identifier
-  module Identifier
-    extend self
+  class Identifier
 
-    attr_accessor :identifier
+    class << self
+      def inherited(subclass)
+        @identifier = subclass
+      end
 
-    def identify(params)
-      @identifier ||= :identify_none
-      send(@identifier.to_sym, params)
+      def identify(params)
+        @identifier ||= Zygote::Identifier
+        @identifier.new(params).identify
+      end
     end
 
-  private
+    def initialize(params)
+      @params = params
+    end
 
-    # By default, we won't mutate the params in any way
-    def identify_none(params)
-      params
+    # Called only if this class is never subclassed
+    def identify
+      @params
     end
   end
 end
