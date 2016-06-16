@@ -8,6 +8,7 @@ require 'rack/contrib'
 
 require 'zygote/util'
 require 'zygote/cell_queue'
+require 'zygote/identifier'
 
 # Main HTTP class, handles routing methods
 # Uses sinatra format (all sinatra docs on routing methods apply)
@@ -42,6 +43,9 @@ class ZygoteWeb < Sinatra::Base
     # Check if there are is any queued data for this SKU, and if so, merge it in to params
     queued_data = CellQueue.shift(sku)
     cleaned.merge!(queued_data) if queued_data
+
+    # Provide a hook for an external identifier to alter behavior
+    cleaned = Zygote::Identifier.identify(cleaned)
     body { erb :menu, locals: { opts: ZygoteWeb.cell_config.merge('params' => cleaned || {}) } }
   end
 
