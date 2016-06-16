@@ -1,4 +1,4 @@
-[![travis ci](https://travis-ci.org/dalehamel/zygote-gem.svg)](https://travis-ci.org/dalehamel/zygote-gem)
+[![travis ci](https://travis-ci.org/Shopify/zygote-gem.svg)](https://travis-ci.org/Shopify/zygote-gem)
 
 # Zygote
 

@@ -6,7 +6,9 @@ require 'rspec'
 require 'em-synchrony'
 require 'em-synchrony/em-http'
 
+# Main zygote class
 module Zygote
+  # Helper to set up test config
   module TestConfig
     extend self
     attr_reader :config_path, :cells, :port, :fixtures
@@ -24,7 +26,7 @@ module Zygote
       mod.class_eval %[
         around(:each) do |example|
           EM.synchrony do
-            ZygoteServer.new(
+            Zygote::Server.new(
               config_path: TestConfig.config_path,
               cells: TestConfig.cells
             ).start
@@ -70,7 +72,7 @@ module Zygote
 
   # Returns EventMachine::HttpClient
   def post(uri, params = {})
-    EM::Synchrony.sync(EventMachine::HttpRequest.new("http://127.0.0.1:#{TestConfig.port}/#{uri}").apost(body: JSON.dump(params), head: {'Content-Type' => 'application/json'}))
+    EM::Synchrony.sync(EventMachine::HttpRequest.new("http://127.0.0.1:#{TestConfig.port}/#{uri}").apost(body: JSON.dump(params), head: { 'Content-Type' => 'application/json' }))
   end
 
   def parameterize(params)
