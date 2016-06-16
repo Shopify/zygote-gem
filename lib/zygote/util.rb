@@ -26,7 +26,7 @@ end
 
 def clean_params(params)
   params.delete_if { |x, _| x == 'splat' || x == 'captures' }
-  params = params.map { |k,v| [k, v.is_a?(Hash) ? encode64(v) : v] }.to_h
+  params = params.map { |k, v| [k, v.is_a?(Hash) ? encode64(v) : v] }.to_h
   params
 end
 
