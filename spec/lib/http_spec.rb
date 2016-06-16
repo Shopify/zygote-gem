@@ -18,6 +18,19 @@ RSpec.describe ZygoteWeb do
     end
   end
 
+  context 'identifier' do
+    it 'uses params mutated by identifier' do
+      class MyIdentifier < Zygote::Identifier
+        def identify
+          @params.merge('selected_cell' => 'mutated_by_identifier')
+        end
+      end
+
+      menu = get('/chain', manufacturer: 'Supermicro', serial: '1234567').response
+      expect(menu).to include("goto mutated_by_identifier")
+    end
+  end
+
   context 'queues' do
     let(:asset) { 'SPM-1234567' }
     let(:asset2) { 'SPM-2468101214' }
