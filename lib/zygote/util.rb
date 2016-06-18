@@ -47,5 +47,11 @@ def discover_domain
 end
 
 def kernel_params(hash)
-  hash.map { |k, v| v == true ? k : "#{k}=#{v}" }.join(' ')
+  hash.map do |k, v|
+    if v.is_a? Array
+      v.map { |x| "#{k}=#{x}" }
+    else
+      "#{k}=#{v}"
+    end
+  end.join(' ')
 end

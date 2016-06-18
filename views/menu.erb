@@ -73,11 +73,12 @@ set submenu-timeout 0
 goto ${selected}
 
 # Generate chains for each submenu entry
-  <% data['menu']['submenu'].each do |entry, data| %>
-    <% local_params = (data['params'] || {}).merge(params) %>
+  <% data['menu']['submenu'].each do |entry, subdata| %>
+    <% local_params = (subdata['params'] || {}).merge(params) %>
+    <% local_params.merge!({ delegated: cell}) if data['delegate'] %>
     <% parmstr = {entry: entry}.merge(local_params).to_query %>
 :<%= cell %>-<%= entry %>
-chain --replace --autofree  http://${dhcp-server}/cell/<%= cell %>/<%= data['action'] || 'boot' %><%= parmstr.empty? ? "" : "?#{parmstr}" %>
+chain --replace --autofree  http://${dhcp-server}/cell/<%= data['delegate'] || cell %>/<%= subdata['action'] || 'boot' %><%= parmstr.empty? ? "" : "?#{parmstr}" %>
   <% end %>
 <% end %>
 

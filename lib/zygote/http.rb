@@ -57,9 +57,10 @@ module Zygote
         # Clean params into a simple hash
         cleaned = clean_params(params.to_h)
         # Add the cell to the parameters
+        delegated = cleaned['delegated']
         cell = cleaned['cell']
         # Merge the cleaned params in with any cell options
-        cell_opts = Zygote::Web.cell_config['index']['cells'][cell] || {}
+        cell_opts = Zygote::Web.cell_config['index']['cells'][delegated || cell] || {}
         opts = cell_opts.merge('params' => cleaned || {})
         body { erb :"#{cell}/#{cleaned['action']}".to_sym, locals: { opts: opts } }
       end
