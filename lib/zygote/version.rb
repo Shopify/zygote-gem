@@ -1,4 +1,4 @@
 # Namespace for our gem
 module Zygote
-  VERSION = '0.2.13'.freeze
+  VERSION = '0.2.14'.freeze
 end
