@@ -38,18 +38,14 @@ RSpec.describe 'utility class' do
 
   context 'kernel params' do
     let(:keyvalue) { { 'boot' => 'live', 'root' => '/dev/ram0' } }
-    let(:present) { { 'live' => true } }
+    let(:list) { { 'console' => ['tty0', 'ttyS1' ]} }
 
     it 'maps hashes' do
       expect(kernel_params(keyvalue)).to eq('boot=live root=/dev/ram0')
     end
 
-    it 'flags if true' do
-      expect(kernel_params(present)).to eq('live')
-    end
-
-    it 'handles flags and hashes' do
-      expect(kernel_params(keyvalue.merge(present))).to eq('boot=live root=/dev/ram0 live')
+    it 'handles hashes and lists' do
+      expect(kernel_params(keyvalue.merge(list))).to eq('boot=live root=/dev/ram0 console=tty0 console=ttyS1')
     end
   end
 end
