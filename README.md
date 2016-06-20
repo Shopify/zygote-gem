@@ -2,11 +2,30 @@
 
 # Zygote
 
-Zygote is a bootstrap automation framework that allows you to easily bootstrap servers and switches.
+When any system boots, Zygote's job is to tell it what to do.
+
+Zygote leverages ERB templates empower complex decision making where systems are otherwise limited to simple protocols.
+
+Using iPXE, Zygote can direct servers to bootstrap, run recovery scripts, perform system burnin, or other task that might normally be manual.
+
+For switches, Zygote may be used to render switch configurations, and relay them back via Zero Touch Provisioning.
+
+Zygote can control any DHCP-capable device.
 
 # Usage
 
-To get started:
+## Cells
+
+Cells are zygote's concept of modules and name-spacing. Cells with ERB templates are exposed as endpoints, and provide the interface to zygote.
+
+A cell can call back to other cells during its operation, enabling zygote to proxy requests so that the client machine doesn't to authenticate.
+
+Cells can also be used to logically group common functionality, so that cells can share logic server-side by leveraging ERB partials.
+
+Each cell can also specify static configuration values in cells.yml. These values will be available in the render-time context of the cell.
+
+
+## Getting started
 
 ```
 require 'zygote'
@@ -45,7 +64,9 @@ index:
 
 # iPXE
 
-Zygote supports bootstrapping servers through generating iPXE menus
+Zygote supports bootstrapping servers through generating [iPXE scripted](http://ipxe.org/scripting) menus
+
+It's probably necessary to gain a basic understanding of the [iPXE scripting commands](http://ipxe.org/cmd) to generate meaningful scripts.
 
 ## Menu generation
 
@@ -155,6 +176,9 @@ You may purge the queue completely:
 ```
 curl -X DELETE localhost:7000/queue?sku=1234567 # FIXME: this is orthogonal, figure out why DELETE collides with GET
 ```
+# Debugging
+
+Setting DEBUG=true (or to anything) will cause zygote to print the fully body of all requests and responses.
 
 # Testing
 
