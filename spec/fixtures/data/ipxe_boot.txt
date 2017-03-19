@@ -1,6 +1,7 @@
 #!ipxe
+
 # see http://etherboot.org/wiki/commandline for details on smbios strings
-set boot-url http://${dhcp-server}/chain
+set boot-url http://10.0.0.10/chain
 
 set uri-params  mac=${mac}
 set uri-params  ${uri-params}&serial=${serial}

@@ -33,9 +33,9 @@ goto ${selected}
 
 # Generated chain entries for each top-level menu
 :test_os
-chain --replace --autofree  http://${dhcp-server}/cell/test_os/boot?board-product=X9DRT-PT&board-serial=ZM143S050147&dhcp-server=172.16.2.4&ip=127.0.0.1&mac=0c%3Ac4%3A7a%3A05%3A77%3A1a&manufacturer=Supermicro&product=SYS-2027PR-HTTR&serial=S15500224715585&sku=SPM-ZM143S050147
+chain --replace --autofree  http://10.0.0.10/cell/test_os/boot?board-product=X9DRT-PT&board-serial=ZM143S050147&dhcp_server=10.0.0.10&ip=127.0.0.1&mac=0c%3Ac4%3A7a%3A05%3A77%3A1a&manufacturer=Supermicro&product=SYS-2027PR-HTTR&serial=S15500224715585&sku=SPM-ZM143S050147
 :test_util
-chain --replace --autofree  http://${dhcp-server}/cell/test_util/boot?board-product=X9DRT-PT&board-serial=ZM143S050147&dhcp-server=172.16.2.4&ip=127.0.0.1&mac=0c%3Ac4%3A7a%3A05%3A77%3A1a&manufacturer=Supermicro&product=SYS-2027PR-HTTR&serial=S15500224715585&sku=SPM-ZM143S050147
+chain --replace --autofree  http://10.0.0.10/cell/test_util/boot?board-product=X9DRT-PT&board-serial=ZM143S050147&dhcp_server=10.0.0.10&ip=127.0.0.1&mac=0c%3Ac4%3A7a%3A05%3A77%3A1a&manufacturer=Supermicro&product=SYS-2027PR-HTTR&serial=S15500224715585&sku=SPM-ZM143S050147
 
 # Render any submenus
 
@@ -55,7 +55,7 @@ goto ${selected}
 
 # Generate chains for each submenu entry
 :nested-main_entry
-chain --replace --autofree  http://${dhcp-server}/cell/nested/boot?board-product=X9DRT-PT&board-serial=ZM143S050147&dhcp-server=172.16.2.4&entry=main_entry&ip=127.0.0.1&mac=0c%3Ac4%3A7a%3A05%3A77%3A1a&manufacturer=Supermicro&product=SYS-2027PR-HTTR&serial=S15500224715585&sku=SPM-ZM143S050147
+chain --replace --autofree  http://10.0.0.10/cell/nested/boot?board-product=X9DRT-PT&board-serial=ZM143S050147&dhcp_server=10.0.0.10&entry=main_entry&ip=127.0.0.1&mac=0c%3Ac4%3A7a%3A05%3A77%3A1a&manufacturer=Supermicro&product=SYS-2027PR-HTTR&serial=S15500224715585&sku=SPM-ZM143S050147
 
 ##########################################
 

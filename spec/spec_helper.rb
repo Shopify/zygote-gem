@@ -4,6 +4,7 @@ require 'yaml'
 require 'json'
 
 require 'zygote/test'
+require 'pry'
 include Zygote
 TestConfig.setup
 

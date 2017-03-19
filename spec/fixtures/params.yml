@@ -3,7 +3,6 @@ routing:
     foo: bar
     spam: eggs
   chain:
-    dhcp-server: "172.16.2.4"
     mac: "0c:c4:7a:05:77:1a"
     serial: "S15500224715585"
     product: "SYS-2027PR-HTTR"
