@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.license = 'MIT'
   s.add_runtime_dependency 'erubis', ['=2.7.0']
   s.add_runtime_dependency 'worsemodel', ['=0.2.0']
-  s.add_runtime_dependency 'em-http-request', ['=1.1.2']
+  s.add_runtime_dependency 'em-http-request', '=1.1.7'
   s.add_runtime_dependency 'async_sinatra', ['=1.2.1']
   s.add_runtime_dependency 'em-synchrony', ['=1.0.4']
   s.add_runtime_dependency 'thin', ['>= 1.6.4']
